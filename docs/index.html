@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sink docs</title>
+<meta name="description" content="How Sink works: deposits, sFABLES, SINK and vlSINK, voting, the agent, security, and questions.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap">
+<style>
+:root{--bg:#000;--fg:#d9d9d9;--mute:#7a7a7a;--line:#262626;--green:#39ff14;--mono:"JetBrains Mono","IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;--sans:Inter,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px)}
+.wrap{position:relative;max-width:1040px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;font-family:var(--mono);font-size:13px;color:var(--mute);border-bottom:1px solid var(--line)}
+nav .prompt b{color:var(--fg);font-weight:500}
+nav a{color:var(--mute);text-decoration:none}
+nav a:hover{color:var(--green)}
+.layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:40px 0 80px}
+aside{position:sticky;top:24px;align-self:start;font-family:var(--mono);font-size:13px}
+aside a{display:block;color:var(--mute);text-decoration:none;padding:6px 0;border-left:1px solid var(--line);padding-left:14px}
+aside a:hover{color:var(--green);border-color:var(--green)}
+main h1{font-family:var(--mono);font-weight:600;font-size:34px;margin-bottom:10px}
+main h1 em,main h2 em{font-style:normal;color:var(--green)}
+main .intro{color:var(--mute);margin-bottom:40px}
+main h2{font-family:var(--mono);font-weight:600;font-size:24px;margin:56px 0 16px;padding-top:24px;border-top:1px solid var(--line)}
+main h2 .lbl{display:block;font-size:12px;font-weight:400;color:var(--mute);margin-bottom:10px}
+main p{margin-bottom:16px;max-width:720px}
+main ul{margin:0 0 16px 22px;max-width:720px}
+main li{margin-bottom:8px}
+.term{border:1px solid var(--line);padding:22px 24px;font-family:var(--mono);font-size:14px;line-height:1.7;margin:20px 0 24px;max-width:720px}
+.term p{padding-left:22px;text-indent:-22px;margin-bottom:8px}
+.term p::before{content:"> ";color:var(--green)}
+table{width:100%;max-width:720px;border-collapse:collapse;font-family:var(--mono);font-size:14px;margin:12px 0 24px}
+td,th{padding:12px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mute);font-weight:400;font-size:12px;letter-spacing:.04em}
+td:last-child{color:var(--mute)}
+.q{font-family:var(--mono);font-weight:600;margin-top:22px}
+.q::before{content:"> ";color:var(--green)}
+.note{padding-left:14px;border-left:2px solid var(--green);color:var(--mute);font-size:15px;margin:20px 0}
+@media(max-width:820px){.layout{grid-template-columns:1fr}aside{position:static;display:flex;flex-wrap:wrap;gap:4px 14px}aside a{border:0;padding:4px 0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <a href="../" style="font-family:var(--mono);font-weight:700;font-size:18px;color:var(--fg);text-decoration:none">SINK<span style="color:var(--green)">_</span> <span style="color:var(--mute);font-weight:400;font-size:13px">docs</span></a>
+  <a href="../">&larr; back to sink</a>
+</nav>
+
+<div class="layout">
+<aside>
+  <a href="#overview">overview</a>
+  <a href="#fables">fables and the vote</a>
+  <a href="#deposit">deposit and sfables</a>
+  <a href="#sink">sink and vlsink</a>
+  <a href="#voting">the weekly vote</a>
+  <a href="#agent">the agent</a>
+  <a href="#income">where the income goes</a>
+  <a href="#security">security</a>
+  <a href="#timeline">timeline</a>
+  <a href="#faq">faq</a>
+</aside>
+
+<main>
+<h1>Sink <em>docs</em></h1>
+<p class="intro">Everything in one place, in plain words. Nothing here is a rate, a yield or a promise.</p>
+
+<h2 id="overview">What Sink is</h2>
+<p>Sink is a pool for the votes on Fables, the exchange on Robinhood Chain. You deposit FABLES, Sink locks it permanently, and you receive sFABLES, a receipt you can hold or sell at any time. Every week Sink votes the whole pool as one block and collects the fees and incentives those votes earn. The earnings go back to sFABLES holders and to the people who hold SINK locked.</p>
+<p>It is the same shape as Convex on Curve, built for Robinhood Chain from the first week of FABLES.</p>
+
+<h2 id="fables">Fables and the vote</h2>
+<p>Fables is a dynamic-fee ve(3,3) exchange on Uniswap v4, live on Robinhood Chain, where traders swap tokenized stocks and crypto. Its token, FABLES, launches on 20 October 2026. Every week Fables prints FABLES as a reward to its pools, and locked FABLES holders vote on which pools receive it. Voters also receive the trading fees of the pools they vote for.</p>
+<p>Three things make those votes badly held on their own:</p>
+<ul>
+  <li>Locking is a long commitment and voting is a weekly chore, so most holders never vote and the fees go to whoever shows up.</li>
+  <li>A thousand small holders voting separately move nothing. Pooled, they decide the exchange.</li>
+  <li>Locked FABLES cannot be sold. Many holders never lock for that reason alone.</li>
+</ul>
+
+<h2 id="deposit">Deposit and sFABLES</h2>
+<div class="term">
+  <p>You deposit FABLES into Sink.</p>
+  <p>Sink locks it in the lock contract. The lock is permanent and is never undone.</p>
+  <p>You receive sFABLES one for one. sFABLES is a normal token: hold it, sell it, move it.</p>
+  <p>sFABLES earns the pool's share of trading fees and incentives, paid out each week.</p>
+  <p>sFABLES does not vote. The vote belongs to vlSINK.</p>
+</div>
+<p>The receipt is what gives depositors liquidity. A protocol-owned sFABLES/FABLES pool exists so a holder who wants out can sell the receipt instead of waiting for a lock that never ends.</p>
+
+<h2 id="sink">SINK and vlSINK</h2>
+<p>SINK is Sink's own token. Lock it and you hold vlSINK, which does two things:</p>
+<ul>
+  <li>It decides where the whole pool votes each week. Majority of vlSINK weight directs every FABLES vote Sink holds, so one locked SINK directs far more weight than one locked FABLES.</li>
+  <li>It receives the platform's cut of everything the pool collects: trading fees and incentives alike. The bigger the pool, the bigger the cut.</li>
+</ul>
+<p>Who wants that: a project with a pool on Fables that wants rewards on it, a holder who wants the platform's cut, and a depositor who holds sFABLES and wants a say too. Every one of these locks SINK.</p>
+
+<h2 id="voting">The weekly vote</h2>
+<p>Each week vlSINK holders open the gauge page and choose where the pool's votes go. The majority of weight decides, and Sink casts the whole pool as one block before the Fables epoch closes. Voting by hand is the default; nobody has to opt into anything to vote themselves.</p>
+
+<h2 id="agent">The agent</h2>
+<p>The agent is opt-in and does three things, nothing more.</p>
+<table>
+  <tr><th>job</th><th>what happens</th></tr>
+  <tr><td>Vote</td><td>If you have not voted by Wednesday, your weight follows the house allocation: the pools paying the most fees and incentives per vote that week.</td></tr>
+  <tr><td>Claim</td><td>Your rewards are claimed and credited without you touching a dozen contracts.</td></tr>
+  <tr><td>Report</td><td>A note on Monday saying what your votes earned.</td></tr>
+</table>
+<p>You can switch the agent off, override its vote any week, or never turn it on at all.</p>
+
+<h2 id="income">Where the income goes</h2>
+<p>Everything the pool collects, trading fees and incentives, is split three ways on a published schedule: a platform cut, the rest to sFABLES holders and vlSINK holders. The platform cut funds Sink and buys SINK into protocol-owned liquidity. Sink also earns from its own sFABLES/FABLES liquidity and from agent services sold per query to anyone who wants them.</p>
+<p class="note">The exact split is published before deposits open and does not change without notice.</p>
+
+<h2 id="security">Security</h2>
+<table>
+  <tr><th>action</th><th>who can do it</th></tr>
+  <tr><td>Cast the weekly vote</td><td>Agent, no signature</td></tr>
+  <tr><td>Claim and distribute rewards</td><td>Agent, no signature</td></tr>
+  <tr><td>Change your vote or settings</td><td>You, your signature</td></tr>
+  <tr><td>Move locked tokens anywhere</td><td>Nobody. Impossible by design</td></tr>
+</table>
+<p>Locked FABLES sits in the lock contract, audited before deposits open. The agent holds a voting key only and cannot move funds. Circuit breakers fail closed: if anything looks wrong, Sink stops voting rather than voting badly.</p>
+
+<h2 id="timeline">Timeline</h2>
+<table>
+  <tr><td>20 October 2026</td><td>FABLES launches. Sink locks from treasury and casts its first vote.</td></tr>
+  <tr><td>After audit</td><td>Deposits open. sFABLES issued.</td></tr>
+  <tr><td>With SINK's launch</td><td>vlSINK locking and the gauge page open.</td></tr>
+</table>
+
+<h2 id="faq">Questions</h2>
+<p class="q">Can I get my FABLES back?</p>
+<p>No. The lock is permanent, which is what makes the pool's weight real. What you can do is sell sFABLES, the receipt, at any time.</p>
+<p class="q">Does sFABLES vote?</p>
+<p>No. sFABLES earns. vlSINK votes.</p>
+<p class="q">Why would I lock SINK instead of FABLES?</p>
+<p>Because one locked SINK directs the whole pool's weight, not one token's worth of it, and receives the platform's cut on top.</p>
+<p class="q">Do I have to use the agent?</p>
+<p>No. Voting by hand is the default. The agent is there for people who would rather not show up every week.</p>
+<p class="q">Can the agent take my tokens?</p>
+<p>No. It holds a voting key only. Moving locked tokens is impossible for anyone, including us.</p>
+<p class="q">I run a project with a pool on Fables. How do I get the pool's votes?</p>
+<p>Hold vlSINK and vote for your pool, or post an incentive for it on the vote market and let the house allocation come to you.</p>
+<p class="q">What about delegation?</p>
+<p>If Fables ships vote delegation, Sink will accept delegated weight alongside deposits. Nothing is built around it being available at launch.</p>
+</main>
+</div>
+
+</div>
+</body>
+</html>
