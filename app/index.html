@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sink · Deposit</title>
+<meta name="description" content="Deposit FABLES or a veFABLES NFT into Sink and receive sFABLES 1:1. Opens inside the claim window.">
+<meta name="theme-color" content="#F4F2EC">
+<link rel="icon" href="../logo/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../css/sink.css">
+</head>
+<body>
+<div class="above">
+  <div class="wrap">
+    <header class="apptop">
+      <a class="brand" href="../" aria-label="sink, home">
+        <img class="mark" src="../logo/mark-ink.svg" alt="">
+        <img class="word" src="../logo/wordmark-ink.svg" alt="sink">
+      </a>
+      <nav class="nav" aria-label="App">
+        <a href="index.html" aria-current="page">Deposit</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="vote.html">Vote</a>
+        <a href="stats.html">Stats</a>
+      </nav>
+      <span class="chip"><span class="live-dot" aria-hidden="true"></span><span data-chip>epoch 1</span></span>
+      <a class="btn btn-sm" href="#connect">Connect wallet</a>
+    </header>
+  </div>
+  <div class="wrap above-body">
+    <div class="grid"><h1 class="h1" style="grid-column: 1 / span 9">Deposit</h1></div>
+    <div class="grid"><p class="lead" style="grid-column: 1 / span 7">Deposit FABLES or a veFABLES NFT. You receive sFABLES 1:1 on the FABLES inside, and the lock behind it stays at the maximum.</p></div>
+    <p class="mono muted" style="font-size:13px; margin:0">STATUS &middot; contract in review &middot; deposits open inside 20 Oct to 20 Nov</p>
+  </div>
+</div>
+
+<main class="wrap appbody">
+  <div class="grid">
+    <div class="app-main">
+      <input class="tab-in" type="radio" name="dep" id="tab-fables" checked>
+      <input class="tab-in" type="radio" name="dep" id="tab-nft">
+      <div class="tabs" role="tablist">
+        <label for="tab-fables">FABLES</label>
+        <label for="tab-nft">veFABLES NFT</label>
+      </div>
+      <div class="panels">
+
+        <div class="panel panel-fables">
+          <span class="label">Amount</span>
+          <div class="amount">
+            <input data-amount type="text" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-label="Amount of FABLES to deposit">
+            <span class="unit">FABLES</span>
+          </div>
+          <div class="amount-meta"><span>Wallet balance <span class="mono">&mdash;</span></span><button class="linkbtn" type="button" disabled aria-disabled="true" style="cursor:not-allowed">max</button></div>
+
+          <dl class="ledger" style="margin-top:40px">
+            <div><dt>You deposit</dt><dd class="mono"><span data-mirror>&mdash;</span> FABLES</dd></div>
+            <div><dt>You receive</dt><dd class="mono"><span data-mirror>&mdash;</span> sFABLES</dd></div>
+            <div><dt>Your share of the block</dt><dd class="mono">&mdash;</dd></div>
+          </dl>
+
+          <div style="margin-top:32px">
+            <button class="btn btn-primary btn-block" type="button" disabled>Deposit &middot; opens with the claim window</button>
+            <p class="note">Opens inside 20 Oct to 20 Nov, after review.</p>
+          </div>
+        </div>
+
+        <div class="panel panel-nft">
+          <span class="label">Your lock NFTs</span>
+          <div class="scroll-x" style="margin-top:16px">
+            <table class="t">
+              <thead><tr><th>Token id</th><th class="num">FABLES inside</th><th>Lock type</th><th>Expiry</th><th></th></tr></thead>
+              <tbody>
+                <tr class="ghost"><td class="mono">#1042</td><td class="num">12,500.00</td><td>Six-month</td><td class="mono">20 Apr 2027</td><td class="mono" style="font-size:12px; letter-spacing:0.04em">example row, not your wallet</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note" style="margin-top:20px">A six-month lock is extended to auto-max on deposit. Pending rebase is claimed before the merge.</p>
+          <div style="margin-top:32px">
+            <button class="btn btn-primary btn-block" type="button" disabled>Deposit NFT &middot; opens with the claim window</button>
+            <p class="note">Opens inside 20 Oct to 20 Nov, after review.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <aside class="app-side">
+      <h2 class="h3">What happens to it</h2>
+      <ol class="steps">
+        <li>Claim rebase</li>
+        <li>Extend to max, auto-max on</li>
+        <li>Merge into Sink's lock</li>
+        <li>Mint sFABLES 1:1</li>
+      </ol>
+      <p class="note" style="margin-top:20px">Sink's lock never unlocks. The exit is selling sFABLES.</p>
+    </aside>
+  </div>
+</main>
+
+<div class="modal" id="connect" role="dialog" aria-modal="true" aria-labelledby="connect-title">
+  <div class="sheet">
+    <header><span class="h3" id="connect-title">Connect a wallet</span><a class="linkbtn" href="#">close</a></header>
+    <div class="opts">
+      <a href="#connect-note"><span>MetaMask</span><span class="mono muted">&rarr;</span></a>
+      <a href="#connect-note"><span>Rabby</span><span class="mono muted">&rarr;</span></a>
+      <a href="#connect-note"><span>WalletConnect</span><span class="mono muted">&rarr;</span></a>
+    </div>
+  </div>
+</div>
+<div class="modal" id="connect-note" role="dialog" aria-modal="true" aria-labelledby="note-title">
+  <div class="sheet">
+    <header><span class="h3" id="note-title">Not open yet</span><a class="linkbtn" href="#">close</a></header>
+    <div class="msg">
+      <p>Deposits open inside the claim window, 20 Oct to 20 Nov, after review.</p>
+      <p class="muted">Wallets connect when deposits open. Nothing on this page can move your tokens today.</p>
+    </div>
+    <footer><a class="btn btn-sm" href="#">Close</a></footer>
+  </div>
+</div>
+
+<script src="../js/countdown.js"></script>
+</body>
+</html>
