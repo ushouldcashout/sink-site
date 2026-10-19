@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sink · Type and colour</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="logo/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/sink.css">
+</head>
+<body>
+
+<div class="above">
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="./" aria-label="sink, home">
+        <img class="mark" src="logo/mark-ink.svg" alt="">
+        <img class="word" src="logo/wordmark-ink.svg" alt="sink">
+      </a>
+      <nav class="nav" aria-label="Main"><a href="docs.html">Docs</a><a href="app/">App</a></nav>
+    </header>
+  </div>
+  <div class="wrap above-body">
+    <div class="grid"><h1 class="h1" style="grid-column: 1 / span 9">Type and colour</h1></div>
+    <div class="grid"><p class="lead" style="grid-column: 1 / span 7">One page that holds every decision the site makes. If something is not on this page, it is not in the design.</p></div>
+  </div>
+</div>
+
+<main class="wrap" style="padding-bottom:96px">
+
+  <section class="split">
+    <div class="grid">
+      <div class="head"><span class="label">Type</span><h2 class="h2">Three faces</h2></div>
+      <div class="body">
+        <div class="spec-row"><span class="label">h1 · Bricolage 500</span><span class="h1">Lock once.</span></div>
+        <div class="spec-row"><span class="label">72 / 0.95 / &minus;0.03em<br>mobile 44</span><span class="muted mono" style="font-size:15px">Headlines sit on the baseline, left-aligned, never centred in a box.</span></div>
+        <div class="spec-row"><span class="label">h2 · Bricolage 500<br>40 / 1.05 / &minus;0.02em</span><span class="h2">What the block earns</span></div>
+        <div class="spec-row"><span class="label">h3 · Bricolage 500<br>22 / 1.2 / &minus;0.01em</span><span class="h3">Can I get my FABLES back?</span></div>
+        <div class="spec-row"><span class="label">Wordmark · Bricolage 700<br>tracking &minus;0.025em</span><img src="logo/wordmark-ink.svg" alt="sink" style="height:40px"></div>
+        <div class="spec-row"><span class="label">Lead · Instrument Sans 400<br>21 / 1.45, mobile 17</span><p class="lead" style="margin:0">Sink does the locking and the voting.</p></div>
+        <div class="spec-row"><span class="label">Body · Instrument Sans 400<br>17 / 1.5</span><p style="margin:0">You deposit FABLES, or a veFABLES NFT you already hold.</p></div>
+        <div class="spec-row"><span class="label">Label · Azeret Mono 400<br>12 / 1.2 / +0.08em, caps</span><span class="label">sFABLES in circulation</span></div>
+        <div class="spec-row"><span class="label">Figure · Azeret Mono 400<br>28, tabular</span><span class="fig">06d 23h 59m 59s</span></div>
+        <div class="spec-row"><span class="label">Figure · Azeret Mono 400<br>40, tabular</span><span class="fig-xl">12,500.00</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="grid">
+      <div class="head"><span class="label">Colour</span><h2 class="h2">Four and one</h2></div>
+      <div class="body">
+        <div class="grid" style="grid-template-columns: repeat(5, minmax(0,1fr))">
+          <div class="swatch"><div class="chipc" style="background:#F4F2EC"></div><span class="label">Paper</span><span class="mono" style="font-size:13px">#F4F2EC</span></div>
+          <div class="swatch"><div class="chipc" style="background:#0E0F10"></div><span class="label">Ink</span><span class="mono" style="font-size:13px">#0E0F10</span></div>
+          <div class="swatch"><div class="chipc" style="background:#5C5F63"></div><span class="label">Ink 2</span><span class="mono" style="font-size:13px">#5C5F63</span></div>
+          <div class="swatch"><div class="chipc" style="background:#D9D5CB"></div><span class="label">Rule</span><span class="mono" style="font-size:13px">#D9D5CB</span></div>
+          <div class="swatch"><div class="chipc" style="background:#1F3FD1"></div><span class="label">Cobalt</span><span class="mono" style="font-size:13px">#1F3FD1</span></div>
+        </div>
+        <p class="muted" style="margin-top:24px">Cobalt appears in three places only: the live indicator, the one primary action, and the sFABLES line in charts. Everything else is ink on paper. No gradients, no glow, no shadows.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="grid">
+      <div class="head"><span class="label">Space</span><h2 class="h2">Grid and waterline</h2></div>
+      <div class="body">
+        <dl class="ledger" style="margin-top:0">
+          <div><dt>Columns</dt><dd class="mono">12</dd></div>
+          <div><dt>Outer margin</dt><dd class="mono">96px desktop &middot; 24px mobile</dd></div>
+          <div><dt>Gutter</dt><dd class="mono">24px desktop &middot; 16px mobile</dd></div>
+          <div><dt>Baseline unit</dt><dd class="mono">8px</dd></div>
+          <div><dt>Waterline</dt><dd class="mono">560px from top desktop &middot; 420px mobile &middot; 1px ink</dd></div>
+          <div><dt>Other rules</dt><dd class="mono">1px #D9D5CB</dd></div>
+          <div><dt>Corners</dt><dd class="mono">0px; 2px maximum</dd></div>
+          <div><dt>Motion</dt><dd>The epoch countdown digits. Nothing else moves.</dd></div>
+        </dl>
+        <p class="muted" style="margin-top:24px">Above the waterline is explanation. Below it is the instrument: numbers, tables, the app.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="split" style="border-bottom:none">
+    <div class="grid">
+      <div class="head"><span class="label">Logo</span><h2 class="h2">Mark, wordmark, lockup</h2></div>
+      <div class="body">
+        <div class="grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); row-gap: 24px">
+          <div class="logo-tile"><img src="logo/mark-ink.svg" alt="sink mark" style="width:96px;height:96px"></div>
+          <div class="logo-tile ink"><img src="logo/mark-paper.svg" alt="sink mark" style="width:96px;height:96px"></div>
+          <div class="logo-tile"><img src="logo/wordmark-ink.svg" alt="sink" style="height:56px"></div>
+          <div class="logo-tile ink"><img src="logo/wordmark-paper.svg" alt="sink" style="height:56px"></div>
+          <div class="logo-tile"><img src="logo/lockup-ink-on-paper.svg" alt="sink" style="height:72px"></div>
+          <div class="logo-tile ink"><img src="logo/lockup-paper-on-ink.svg" alt="sink" style="height:72px"></div>
+        </div>
+        <div style="display:flex; gap:32px; align-items:center; margin-top:24px">
+          <img src="logo/favicon.svg" alt="favicon at 16px" style="width:16px;height:16px">
+          <img src="logo/favicon.svg" alt="favicon at 32px" style="width:32px;height:32px">
+          <img src="logo/mark-ink.svg" alt="mark at 160px" style="width:160px;height:160px">
+        </div>
+        <p class="muted" style="margin-top:24px">The mark is a drain seen from above: a circle and one off-centre slot, a 2px ink stroke at every size. The favicon carries a heavier stroke so it holds at 16px.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
