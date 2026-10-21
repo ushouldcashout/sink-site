@@ -120,6 +120,39 @@ p:last-child { margin-bottom: 0; }
   .facts { grid-template-columns: 1fr 1fr; row-gap: 24px; padding: 24px 0 32px; }
   .facts > div:nth-child(2) { grid-column: span 2; order: -1; }
 }
+.facts .sub { font-size: 12px; line-height: 1.2; color: var(--ink-2); letter-spacing: 0.02em; min-height: 14px; }
+.facts-2 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+@media (max-width: 760px) {
+  .facts-2 > div:nth-child(2) { grid-column: span 1; order: 0; }
+  .facts-2 > div:first-child { grid-column: span 2; }
+}
+
+/* the list form */
+.join { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 720px; }
+.join label { display: flex; flex-direction: column; gap: 10px; }
+.join input {
+  height: 48px; border: 1px solid var(--ink); background: transparent; padding: 0 12px;
+  font: 400 17px/1 var(--mono); color: var(--ink); border-radius: 0; width: 100%;
+}
+.join input::placeholder { color: var(--rule); }
+.join button { grid-column: 1 / -1; justify-self: start; }
+.join .note { grid-column: 1 / -1; margin: 0; }
+@media (max-width: 760px) { .join { grid-template-columns: 1fr; gap: 16px; } }
+
+.t td.k { font: 400 12px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
+
+/* architecture diagram (docs) */
+.diagram { border-top: 1px solid var(--ink); padding-top: 24px; margin: 8px 0 24px; }
+.diagram svg { display: block; width: 100%; height: auto; font-family: var(--mono); }
+.diagram .box { fill: none; stroke: var(--ink); stroke-width: 1; }
+.diagram .box-c { fill: none; stroke: var(--cobalt); stroke-width: 1.5; }
+.diagram .ln { stroke: var(--ink); stroke-width: 1; fill: none; }
+.diagram .ln-c { stroke: var(--cobalt); stroke-width: 1.5; fill: none; }
+.diagram .ln-d { stroke: var(--ink-2); stroke-width: 1; fill: none; stroke-dasharray: 3 3; }
+.diagram text { fill: var(--ink); font-size: 12px; }
+.diagram .t2 { fill: var(--ink-2); font-size: 11px; }
+.diagram .tt { font-family: var(--text); font-size: 14px; font-weight: 600; }
+
 .live-dot {
   display: inline-block; width: 7px; height: 7px; background: var(--cobalt);
   vertical-align: 0.15em; margin-right: 8px;
