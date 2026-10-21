@@ -92,7 +92,7 @@
       e.preventDefault();
       var contact = form.querySelector("[name=contact]").value.trim();
       var fables = form.querySelector("[name=fables]").value.trim();
-      if (!contact) { msg.textContent = "Enter an X handle, a wallet, or an email."; return; }
+      if (!contact) { msg.textContent = "Enter an X handle or an email."; return; }
       btn.disabled = true; msg.textContent = "…";
       fetch(C.API + "/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contact: contact, fables: fables }) })
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
