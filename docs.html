@@ -74,57 +74,50 @@
         <h2 class="h2">Architecture</h2>
         <p>Five contracts and one key. Nothing below is deployed yet; this is the shape the contracts are being built to.</p>
         <div class="diagram" aria-label="Diagram: deposits flow into the Lock, which mints sFABLES; the Voter casts the block into Fables; income flows through the Distributor to sFABLES holders and vlSINK">
-          <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img">
-            <!-- inputs -->
-            <rect class="box" x="20" y="40" width="150" height="56"/>
-            <text class="tt" x="34" y="64">FABLES</text><text class="t2" x="34" y="82">or a veFABLES NFT</text>
-            <!-- lock -->
-            <rect class="box-c" x="250" y="30" width="200" height="76"/>
-            <text class="tt" x="264" y="56">Lock</text>
-            <text class="t2" x="264" y="74">one veFABLES, max, auto-max on</text>
-            <text class="t2" x="264" y="90">no function turns it off</text>
-            <!-- sfables -->
-            <rect class="box" x="540" y="40" width="200" height="56"/>
-            <text class="tt" x="554" y="64">sFABLES</text><text class="t2" x="554" y="82">1:1, liquid, transferable</text>
-            <!-- arrows row 1 -->
-            <path class="ln-c" d="M170 68 H250"/><path class="ln-c" d="M244 64 L250 68 L244 72"/>
-            <text class="t2" x="178" y="60">claim rebase,</text><text class="t2" x="178" y="84">extend, merge</text>
-            <path class="ln-c" d="M450 68 H540"/><path class="ln-c" d="M534 64 L540 68 L534 72"/>
-            <text class="t2" x="478" y="60">mint</text>
-            <!-- voter -->
-            <rect class="box" x="250" y="170" width="200" height="66"/>
-            <text class="tt" x="264" y="194">Voter</text>
-            <text class="t2" x="264" y="212">tallies vlSINK votes, fills the</text>
-            <text class="t2" x="264" y="226">rest from the house allocation</text>
-            <path class="ln" d="M350 106 V170"/><path class="ln" d="M346 164 L350 170 L354 164"/>
-            <text class="t2" x="358" y="142">votes the lock</text>
-            <!-- key -->
-            <rect class="box" x="20" y="175" width="150" height="56"/>
-            <text class="tt" x="34" y="199">Voting key</text><text class="t2" x="34" y="217">submits the tally. Nothing else.</text>
-            <path class="ln-d" d="M170 203 H250"/>
-            <!-- vlsink -->
-            <rect class="box" x="540" y="175" width="200" height="56"/>
-            <text class="tt" x="554" y="199">vlSINK</text><text class="t2" x="554" y="217">fixed term, no decay, votes</text>
-            <path class="ln" d="M540 203 H450"/><path class="ln" d="M456 199 L450 203 L456 207"/>
-            <text class="t2" x="470" y="195">weights</text>
-            <!-- fables -->
-            <rect class="box" x="250" y="290" width="200" height="56"/>
-            <text class="tt" x="264" y="314">Fables</text><text class="t2" x="264" y="332">gauges, fees, incentives, rebase</text>
-            <path class="ln" d="M330 236 V290"/><path class="ln" d="M326 284 L330 290 L334 284"/>
-            <text class="t2" x="338" y="266">block, Monday</text>
-            <path class="ln" d="M370 290 V236"/><path class="ln" d="M366 242 L370 236 L374 242"/>
-            <!-- distributor -->
-            <rect class="box-c" x="540" y="290" width="200" height="56"/>
-            <text class="tt" x="554" y="314">Distributor</text><text class="t2" x="554" y="332">claims Wednesday, splits, pays</text>
-            <path class="ln-c" d="M450 318 H540"/><path class="ln-c" d="M534 314 L540 318 L534 322"/>
-            <text class="t2" x="462" y="310">income</text>
-            <!-- payouts -->
-            <path class="ln-c" d="M600 290 V231"/><path class="ln-c" d="M596 237 L600 231 L604 237"/>
-            <text class="t2" x="608" y="262">the cut</text>
-            <path class="ln-c" d="M680 290 V96"/><path class="ln-c" d="M676 102 L680 96 L684 102"/>
-            <text class="t2" x="688" y="262">the rest, weekly,</text><text class="t2" x="688" y="276">in the tokens earned</text>
-            <!-- footer note -->
-            <text class="t2" x="20" y="400">The rebase is paid to the Lock. Whether it compounds inside the Lock or is paid out to sFABLES holders is published before deposits open.</text>
+          <svg viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg" role="img">
+            <!-- row 1 -->
+            <rect class="box" x="20" y="30" width="170" height="76"/>
+            <text class="tt" x="34" y="56">FABLES</text><text class="t2" x="34" y="76">or a veFABLES NFT</text>
+            <rect class="box-c" x="280" y="30" width="250" height="76"/>
+            <text class="tt" x="294" y="56">Lock</text>
+            <text class="t2" x="294" y="76">one veFABLES, max, auto-max</text>
+            <text class="t2" x="294" y="92">no function turns it off</text>
+            <rect class="box" x="620" y="30" width="260" height="76"/>
+            <text class="tt" x="634" y="56">sFABLES</text><text class="t2" x="634" y="76">1:1, liquid, transferable</text>
+            <path class="ln-c" d="M190 68 H280"/><path class="ln-c" d="M274 64 L280 68 L274 72"/>
+            <text class="t2" x="196" y="58">claim, extend,</text><text class="t2" x="210" y="84">merge</text>
+            <path class="ln-c" d="M530 68 H620"/><path class="ln-c" d="M614 64 L620 68 L614 72"/>
+            <text class="t2" x="560" y="58">mint</text>
+            <!-- row 2 -->
+            <rect class="box" x="20" y="180" width="170" height="70"/>
+            <text class="tt" x="34" y="206">Voting key</text><text class="t2" x="34" y="226">submits the tally</text>
+            <text class="t2" x="34" y="240">nothing else</text>
+            <rect class="box" x="280" y="180" width="250" height="70"/>
+            <text class="tt" x="294" y="206">Voter</text>
+            <text class="t2" x="294" y="226">vlSINK tally, then the</text>
+            <text class="t2" x="294" y="240">house allocation, weekly</text>
+            <rect class="box" x="620" y="180" width="260" height="70"/>
+            <text class="tt" x="634" y="206">vlSINK</text><text class="t2" x="634" y="226">fixed term, no decay</text>
+            <path class="ln-d" d="M190 215 H280"/>
+            <path class="ln" d="M405 106 V180"/><path class="ln" d="M401 174 L405 180 L409 174"/>
+            <text class="t2" x="413" y="148">votes the lock</text>
+            <path class="ln" d="M620 215 H530"/><path class="ln" d="M536 211 L530 215 L536 219"/>
+            <text class="t2" x="548" y="206">weights</text>
+            <!-- row 3 -->
+            <rect class="box" x="280" y="320" width="250" height="60"/>
+            <text class="tt" x="294" y="344">Fables</text><text class="t2" x="294" y="364">gauges, fees, incentives</text>
+            <path class="ln" d="M380 250 V320"/><path class="ln" d="M376 314 L380 320 L384 314"/>
+            <text class="t2" x="388" y="290">block, Monday</text>
+            <path class="ln" d="M440 320 V250"/><path class="ln" d="M436 256 L440 250 L444 256"/>
+            <rect class="box-c" x="620" y="320" width="260" height="60"/>
+            <text class="tt" x="634" y="344">Distributor</text><text class="t2" x="634" y="364">claims Wednesday, splits, pays</text>
+            <path class="ln-c" d="M530 350 H620"/><path class="ln-c" d="M614 346 L620 350 L614 354"/>
+            <text class="t2" x="552" y="342">income</text>
+            <path class="ln-c" d="M660 320 V250"/><path class="ln-c" d="M656 256 L660 250 L664 256"/>
+            <text class="t2" x="668" y="290">the cut</text>
+            <path class="ln-c" d="M860 320 V106"/><path class="ln-c" d="M856 112 L860 106 L864 112"/>
+            <text class="t2" x="730" y="282">the rest, weekly,</text><text class="t2" x="730" y="296">in the tokens earned</text>
+            <text class="t2" x="20" y="420">The rebase is paid to the Lock. How it is handled is published before deposits open.</text>
           </svg>
         </div>
         <dl class="ledger">
