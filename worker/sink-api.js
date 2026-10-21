@@ -8,7 +8,7 @@
 //   GET  /export?key=EXPORT_KEY -> CSV
 //   DELETE /admin?key=..&contact=..   remove one entry
 //
-// contact = an X handle (@name), a wallet (0x..), or an email. One entry per contact.
+// contact = an X handle (@name) or an email. One entry per contact.
 // fables = optional whole number of FABLES the person says they hold or will claim. Not verified; shown only in aggregate.
 
 const ORIGINS = ['https://sink.fi', 'https://www.sink.fi', 'https://ushouldcashout.github.io'];
@@ -85,7 +85,6 @@ const POOL_NAMES = {
   '0x01b71670a61dd9175a3d1e08d4e0af00ce71e76d230c92649f3ce9857f7d4abd': 'DJT/USDG',
 };
 
-const ADDR = /^0x[0-9a-fA-F]{40}$/;
 const HANDLE = /^@?[A-Za-z0-9_]{1,15}$/;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -109,7 +108,6 @@ async function sha(s) {
 
 function normalise(raw) {
   const c = String(raw || '').trim();
-  if (ADDR.test(c)) return { kind: 'wallet', value: c.toLowerCase() };
   if (EMAIL.test(c)) return { kind: 'email', value: c.toLowerCase() };
   if (HANDLE.test(c)) return { kind: 'x', value: '@' + c.replace(/^@/, '').toLowerCase() };
   return null;
@@ -220,7 +218,7 @@ export default {
     if (path === '/join' && req.method === 'POST') {
       let body; try { body = await req.json(); } catch { return json(req, { error: 'bad json' }, 400); }
       const n = normalise(body.contact);
-      if (!n) return json(req, { error: 'enter an X handle, a wallet, or an email' }, 400);
+      if (!n) return json(req, { error: 'enter an X handle or an email' }, 400);
       let fables = Math.floor(Number(String(body.fables || '0').replace(/[^0-9.]/g, '')) || 0);
       if (fables < 0 || fables > 2e8) fables = 0; // more than the supply is a typo
       const key = 'c:' + n.value;
