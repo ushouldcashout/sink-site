@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>sink · Docs</title>
-<meta name="description" content="How Sink works: Fables mechanics, the Sink lock, the week, sFABLES, SINK and vlSINK, the platform cut, risks and contracts.">
+<title>Docs · sink</title>
+<meta name="description" content="How Sink works: Fables mechanics, the lock, sFABLES, SINK and vlSINK, the week, the cut, the risks, and what teams can do to get the block.">
 <meta name="theme-color" content="#F4F2EC">
 <link rel="icon" href="logo/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,8 +23,8 @@
       </a>
       <nav class="nav" aria-label="Main">
         <a href="docs.html" aria-current="page">Docs</a>
-        
-        
+        <a href="./#list">The list</a>
+        <a data-x href="#" rel="noopener" hidden>X</a>
       </nav>
     </header>
   </div>
@@ -40,13 +40,15 @@
       <span class="label">Contents</span>
       <ol>
         <li><a href="#fables"><span>01</span>Fables mechanics</a></li>
-        <li><a href="#sink"><span>02</span>Sink mechanics</a></li>
-        <li><a href="#week"><span>03</span>The week</a></li>
-        <li><a href="#sfables"><span>04</span>sFABLES</a></li>
-        <li><a href="#vlsink"><span>05</span>SINK and vlSINK</a></li>
-        <li><a href="#cut"><span>06</span>The platform cut</a></li>
-        <li><a href="#risks"><span>07</span>Risks</a></li>
-        <li><a href="#contracts"><span>08</span>Contracts</a></li>
+        <li><a href="#architecture"><span>02</span>Architecture</a></li>
+        <li><a href="#sink"><span>03</span>Sink mechanics</a></li>
+        <li><a href="#week"><span>04</span>The week</a></li>
+        <li><a href="#sfables"><span>05</span>sFABLES</a></li>
+        <li><a href="#vlsink"><span>06</span>SINK and vlSINK</a></li>
+        <li><a href="#cut"><span>07</span>The platform cut</a></li>
+        <li><a href="#teams"><span>08</span>For teams with a pool</a></li>
+        <li><a href="#risks"><span>09</span>Risks</a></li>
+        <li><a href="#contracts"><span>10</span>Contracts and review</a></li>
       </ol>
     </nav>
 
@@ -55,20 +57,88 @@
       <section id="fables">
         <span class="label">01</span>
         <h2 class="h2">Fables mechanics</h2>
-        <p>Fables is the ve(3,3) DEX on Robinhood Chain. Its token is FABLES. Lock FABLES for two years at auto-max and the lock votes every week on which pools receive emissions.</p>
+        <p>Fables is the ve(3,3) DEX on Robinhood Chain, built on Uniswap v4. Its token is FABLES. Lock FABLES for two years at auto-max and the lock votes every week on which pools receive emissions.</p>
         <p>A voting lock receives, on the pools it votes:</p>
         <dl class="ledger" style="margin-bottom:24px">
           <div><dt>Swap fees, staked liquidity</dt><dd class="mono">100%</dd></div>
           <div><dt>Swap fees, unstaked liquidity</dt><dd class="mono">10%</dd></div>
-          <div><dt>Incentives</dt><dd>Posted on those gauges</dd></div>
-          <div><dt>Rebase</dt><dd>Added to locks that voted</dd></div>
+          <div><dt>Incentives</dt><dd>Posted on those gauges, paid in whatever token was posted</dd></div>
+          <div><dt>Rebase</dt><dd>FABLES added to locks that voted, at a rate that falls as more of the supply is locked</dd></div>
         </dl>
-        <p>The lock is a veFABLES NFT. Auto-max keeps it at full weight until it is switched off. Locks with the same expiry can be merged. There is no vote delegation: only the owner of a lock can vote it. Changing a vote more than once a week is penalised. Emissions to each pool are capped against the fees its staked liquidity earned the week before.</p>
+        <p>The lock is a veFABLES NFT. Auto-max keeps it at full weight until it is switched off. Locks with the same expiry can be merged. There is no vote delegation: only the owner of a lock can vote it. A lock that does not vote in a week earns nothing that week. Emissions to each pool are capped at twice the fees its staked liquidity earned the week before; incentives do not raise the cap.</p>
         <p>Locked means locked. The FABLES inside a veFABLES position cannot be sold.</p>
       </section>
 
-      <section id="sink">
+      <section id="architecture">
         <span class="label">02</span>
+        <h2 class="h2">Architecture</h2>
+        <p>Five contracts and one key. Nothing below is deployed yet; this is the shape the contracts are being built to.</p>
+        <div class="diagram" aria-label="Diagram: deposits flow into the Lock, which mints sFABLES; the Voter casts the block into Fables; income flows through the Distributor to sFABLES holders and vlSINK">
+          <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img">
+            <!-- inputs -->
+            <rect class="box" x="20" y="40" width="150" height="56"/>
+            <text class="tt" x="34" y="64">FABLES</text><text class="t2" x="34" y="82">or a veFABLES NFT</text>
+            <!-- lock -->
+            <rect class="box-c" x="250" y="30" width="200" height="76"/>
+            <text class="tt" x="264" y="56">Lock</text>
+            <text class="t2" x="264" y="74">one veFABLES, max, auto-max on</text>
+            <text class="t2" x="264" y="90">no function turns it off</text>
+            <!-- sfables -->
+            <rect class="box" x="540" y="40" width="200" height="56"/>
+            <text class="tt" x="554" y="64">sFABLES</text><text class="t2" x="554" y="82">1:1, liquid, transferable</text>
+            <!-- arrows row 1 -->
+            <path class="ln-c" d="M170 68 H250"/><path class="ln-c" d="M244 64 L250 68 L244 72"/>
+            <text class="t2" x="178" y="60">claim rebase,</text><text class="t2" x="178" y="84">extend, merge</text>
+            <path class="ln-c" d="M450 68 H540"/><path class="ln-c" d="M534 64 L540 68 L534 72"/>
+            <text class="t2" x="478" y="60">mint</text>
+            <!-- voter -->
+            <rect class="box" x="250" y="170" width="200" height="66"/>
+            <text class="tt" x="264" y="194">Voter</text>
+            <text class="t2" x="264" y="212">tallies vlSINK votes, fills the</text>
+            <text class="t2" x="264" y="226">rest from the house allocation</text>
+            <path class="ln" d="M350 106 V170"/><path class="ln" d="M346 164 L350 170 L354 164"/>
+            <text class="t2" x="358" y="142">votes the lock</text>
+            <!-- key -->
+            <rect class="box" x="20" y="175" width="150" height="56"/>
+            <text class="tt" x="34" y="199">Voting key</text><text class="t2" x="34" y="217">submits the tally. Nothing else.</text>
+            <path class="ln-d" d="M170 203 H250"/>
+            <!-- vlsink -->
+            <rect class="box" x="540" y="175" width="200" height="56"/>
+            <text class="tt" x="554" y="199">vlSINK</text><text class="t2" x="554" y="217">fixed term, no decay, votes</text>
+            <path class="ln" d="M540 203 H450"/><path class="ln" d="M456 199 L450 203 L456 207"/>
+            <text class="t2" x="470" y="195">weights</text>
+            <!-- fables -->
+            <rect class="box" x="250" y="290" width="200" height="56"/>
+            <text class="tt" x="264" y="314">Fables</text><text class="t2" x="264" y="332">gauges, fees, incentives, rebase</text>
+            <path class="ln" d="M330 236 V290"/><path class="ln" d="M326 284 L330 290 L334 284"/>
+            <text class="t2" x="338" y="266">block, Monday</text>
+            <path class="ln" d="M370 290 V236"/><path class="ln" d="M366 242 L370 236 L374 242"/>
+            <!-- distributor -->
+            <rect class="box-c" x="540" y="290" width="200" height="56"/>
+            <text class="tt" x="554" y="314">Distributor</text><text class="t2" x="554" y="332">claims Wednesday, splits, pays</text>
+            <path class="ln-c" d="M450 318 H540"/><path class="ln-c" d="M534 314 L540 318 L534 322"/>
+            <text class="t2" x="462" y="310">income</text>
+            <!-- payouts -->
+            <path class="ln-c" d="M600 290 V231"/><path class="ln-c" d="M596 237 L600 231 L604 237"/>
+            <text class="t2" x="608" y="262">the cut</text>
+            <path class="ln-c" d="M680 290 V96"/><path class="ln-c" d="M676 102 L680 96 L684 102"/>
+            <text class="t2" x="688" y="262">the rest, weekly,</text><text class="t2" x="688" y="276">in the tokens earned</text>
+            <!-- footer note -->
+            <text class="t2" x="20" y="400">The rebase is paid to the Lock. Whether it compounds inside the Lock or is paid out to sFABLES holders is published before deposits open.</text>
+          </svg>
+        </div>
+        <dl class="ledger">
+          <div><dt>Lock</dt><dd>Holds the single veFABLES NFT. Accepts FABLES and NFTs, mints sFABLES. Has no function that shortens the lock or turns auto-max off.</dd></div>
+          <div><dt>sFABLES</dt><dd>A plain ERC-20. One per FABLES inside the Lock at the time of deposit.</dd></div>
+          <div><dt>Voter</dt><dd>Takes the vlSINK tally and the house allocation, and calls Fables' vote once a week from the Lock. The only account that can call it is the voting key.</dd></div>
+          <div><dt>Distributor</dt><dd>Claims the week's fees, incentives and rebase; sends the published cut to vlSINK; pays the rest to sFABLES holders pro rata, in the tokens earned.</dd></div>
+          <div><dt>SINK, vlSINK</dt><dd>SINK is an ERC-20. vlSINK is SINK locked for a fixed term, non-transferable, votes once per epoch, unlocks in full.</dd></div>
+          <div><dt>Voting key</dt><dd>One hot key held by the team. It can submit a tally. It cannot move FABLES, sFABLES, SINK or income, and it cannot change the Lock.</dd></div>
+        </dl>
+      </section>
+
+      <section id="sink">
+        <span class="label">03</span>
         <h2 class="h2">Sink mechanics</h2>
         <p>Sink accepts FABLES, or a veFABLES NFT you already hold. Everything deposited is merged into one lock at the maximum, with auto-max on. You receive sFABLES, 1:1 on the FABLES inside.</p>
         <p>A deposited NFT goes through four steps, in this order:</p>
@@ -78,12 +148,12 @@
           <li>Merge it into Sink's lock.</li>
           <li>Mint sFABLES 1:1 on the FABLES it held.</li>
         </ol>
-        <p>A six-month lock is extended to auto-max on deposit and arrives with the 80% of the points allocation it claimed.</p>
+        <p>A six-month lock is extended to auto-max on deposit and arrives with the 80% of the points allocation it claimed. A liquid claim can be deposited as FABLES like any other.</p>
         <p>Sink's lock never unlocks. The contract has no function that turns auto-max off. The only way out of a position is to sell sFABLES.</p>
       </section>
 
       <section id="week">
-        <span class="label">03</span>
+        <span class="label">04</span>
         <h2 class="h2">The week</h2>
         <p>Fables' epoch runs Tuesday to Tuesday. Sink's week is built around it.</p>
         <dl class="ledger">
@@ -92,61 +162,89 @@
           <div><dt>Sunday night</dt><dd>Weight that did not vote follows the house allocation: pools ranked by fees plus incentives per vote</dd></div>
           <div><dt>Monday</dt><dd>Sink casts the block, once</dd></div>
           <div><dt>Tuesday</dt><dd>Fables closes the week</dd></div>
-          <div><dt>Wednesday</dt><dd>Payouts are claimable; Sink's agent claims and distributes them</dd></div>
+          <div><dt>Wednesday</dt><dd>Payouts are claimable; the Distributor claims and pays them</dd></div>
         </dl>
       </section>
 
       <section id="sfables">
-        <span class="label">04</span>
+        <span class="label">05</span>
         <h2 class="h2">sFABLES</h2>
-        <p>sFABLES is the receipt. It is liquid and transferable. Each sFABLES stands for one FABLES inside Sink's lock.</p>
+        <p>sFABLES is the receipt. It is liquid and transferable. Each sFABLES stands for one FABLES inside Sink's lock at the time it was minted. The rebase the lock earns each week is paid to the lock; whether it compounds inside the lock or is paid out to sFABLES holders is a decision published before deposits open.</p>
         <p>The income the block earns comes to sFABLES holders every week, in the tokens it was earned in, net of the platform cut. sFABLES does not vote.</p>
         <p>sFABLES can trade below one FABLES, most likely in weeks with thin liquidity. Three things push it back toward par: a pool Sink seeds and defends, SINK paid directly to the liquidity providers of that pool, and the treasury buying under par out of its cut.</p>
       </section>
 
       <section id="vlsink">
-        <span class="label">05</span>
+        <span class="label">06</span>
         <h2 class="h2">SINK and vlSINK</h2>
         <p>SINK is the second token. Liquid SINK earns nothing and votes on nothing.</p>
         <p>Lock SINK for a fixed term and it becomes vlSINK. vlSINK votes once per epoch on where the block goes, and receives the platform cut. It does not decay: its weight is the same on the last day of the term as on the first. At the end of the term it unlocks in full.</p>
         <p>The team holds a voting key. It submits the tally of vlSINK votes and the house allocation to Fables. It cannot move tokens and cannot change the lock.</p>
-      </section>
-
-      <section id="cut">
-        <span class="label">06</span>
-        <h2 class="h2">The platform cut</h2>
-        <p>A fixed share of what the block earns goes to vlSINK lockers. The rest goes to sFABLES holders.</p>
         <dl class="ledger">
-          <div><dt>Cut to vlSINK</dt><dd class="mono muted">to be published</dd></div>
+          <div><dt>Term length</dt><dd class="mono muted">to be published</dd></div>
+          <div><dt>Supply and allocation</dt><dd class="mono muted">to be published</dd></div>
         </dl>
       </section>
 
-      <section id="risks">
+      <section id="cut">
         <span class="label">07</span>
+        <h2 class="h2">The platform cut</h2>
+        <p>A fixed share of what the block earns goes to vlSINK lockers, the treasury that defends the sFABLES pool, and the agent that claims each week. The rest goes to sFABLES holders. The number is fixed before deposits open and does not move afterwards without a vlSINK vote.</p>
+        <dl class="ledger">
+          <div><dt>Cut, total</dt><dd class="mono muted">to be published</dd></div>
+          <div><dt>Of which vlSINK</dt><dd class="mono muted">to be published</dd></div>
+          <div><dt>Of which treasury and agent</dt><dd class="mono muted">to be published</dd></div>
+        </dl>
+      </section>
+
+      <section id="teams">
+        <span class="label">08</span>
+        <h2 class="h2">For teams with a pool on Fables</h2>
+        <p>Sink votes as one block. If your pool is on Fables, two things move that block toward it, and both are things you control.</p>
+        <dl class="ledger" style="margin-bottom:24px">
+          <div><dt>Post incentives</dt><dd>Post a token on your gauge for the epoch. Fables pays it to the voters who voted your pool. The house allocation ranks pools by fees plus incentives per vote, so a posted incentive raises your rank for every vlSINK holder who did not direct their weight.</dd></div>
+          <div><dt>Keep staked liquidity in it</dt><dd>Voters receive 100% of swap fees from staked liquidity and only 10% from unstaked. A pool whose liquidity is staked pays its voters ten times more per dollar of volume, and Fables' emissions cap is set from staked fees too.</dd></div>
+          <div><dt>Hold vlSINK</dt><dd>vlSINK votes directly on where the block goes. A team that locks SINK steers its own share of the block every week without posting anything.</dd></div>
+          <div><dt>What does not work</dt><dd>Sink does not sell votes, does not take side payments, and does not hard-code any pool. Everything goes through the tally or the house allocation.</dd></div>
+        </dl>
+        <p>Our partner Throne is building a separate market in front of the Fables gauges where teams can post incentives for the Sink block in one place. It is not live; when it is, it links from here.</p>
+      </section>
+
+      <section id="risks">
+        <span class="label">09</span>
         <h2 class="h2">Risks</h2>
         <dl class="ledger">
-          <div><dt>Smart contract</dt><dd>Sink's contracts can have bugs. They are in review, and the addresses below stay empty until it is done.</dd></div>
-          <div><dt>FABLES price</dt><dd>sFABLES tracks FABLES. If FABLES falls, sFABLES falls with it.</dd></div>
-          <div><dt>Fables parameters</dt><dd>Fables can change its fee split, emissions, rebase or lock rules. Sink's income changes with them.</dd></div>
-          <div><dt>Below par</dt><dd>In thin weeks sFABLES can trade below one FABLES. Selling then means selling at a discount.</dd></div>
+          <div><dt>Smart contract</dt><dd>Sink's contracts can have bugs. They are in build and review, and the addresses below stay empty until the review is done and published. A bug in the Lock could lose the FABLES inside it; sFABLES would then be a claim on nothing.</dd></div>
+          <div><dt>FABLES price</dt><dd>sFABLES tracks FABLES. If FABLES falls, sFABLES falls with it. There is no hedge inside Sink.</dd></div>
+          <div><dt>Fables parameters</dt><dd>Fables can change its fee split, emissions cap, rebase schedule or lock rules. Sink's income changes with them, and the lock cannot leave. If Fables ends the rebase, that part of the income stops.</dd></div>
+          <div><dt>Below par</dt><dd>In thin weeks sFABLES can trade below one FABLES. Selling then means selling at a discount. The three par defences are tools, not guarantees.</dd></div>
+          <div><dt>The voting key</dt><dd>If the key is lost, the block does not vote until it is replaced, and the lock earns nothing that week. If the key is stolen, the thief can vote the block badly for one week; they cannot move funds.</dd></div>
+          <div><dt>Fables itself</dt><dd>If Fables stops, the lock stops earning. Sink has no income that does not come through Fables.</dd></div>
+          <div><dt>Concentration</dt><dd>A few large depositors could hold most of sFABLES. They cannot vote the block with it, but they can move the sFABLES price by selling.</dd></div>
         </dl>
       </section>
 
       <section id="contracts">
-        <span class="label">08</span>
-        <h2 class="h2">Contracts</h2>
+        <span class="label">10</span>
+        <h2 class="h2">Contracts and review</h2>
+        <p>Nothing is deployed. The rows fill in, with a link to the source and to the review report, on the day each contract goes live. Until an address appears here, no contract claiming to be Sink is Sink.</p>
         <div class="scroll-x">
           <table class="t">
             <thead><tr><th>Contract</th><th>Address</th><th>Status</th></tr></thead>
             <tbody>
-              <tr class="ghost"><td>Lock</td><td class="mono">&mdash;</td><td>not deployed</td></tr>
-              <tr class="ghost"><td>sFABLES</td><td class="mono">&mdash;</td><td>not deployed</td></tr>
+              <tr class="ghost"><td>Lock</td><td class="mono">&mdash;</td><td>in build</td></tr>
+              <tr class="ghost"><td>sFABLES</td><td class="mono">&mdash;</td><td>in build</td></tr>
+              <tr class="ghost"><td>Voter</td><td class="mono">&mdash;</td><td>in build</td></tr>
+              <tr class="ghost"><td>Distributor</td><td class="mono">&mdash;</td><td>in build</td></tr>
               <tr class="ghost"><td>SINK</td><td class="mono">&mdash;</td><td>not deployed</td></tr>
               <tr class="ghost"><td>vlSINK</td><td class="mono">&mdash;</td><td>not deployed</td></tr>
-              <tr class="ghost"><td>Distributor</td><td class="mono">&mdash;</td><td>not deployed</td></tr>
             </tbody>
           </table>
         </div>
+        <dl class="ledger" style="margin-top:24px">
+          <div><dt>Review</dt><dd class="muted">Reviewer and report: published here when the review is complete.</dd></div>
+          <div><dt>Source</dt><dd class="muted">Repository: published here at deployment.</dd></div>
+        </dl>
       </section>
 
     </div>
@@ -156,10 +254,12 @@
 <footer class="wrap foot">
   <div class="grid">
     <div class="a"><img class="word" src="logo/wordmark-ink.svg" alt="sink"><span class="muted" style="font-size:15px">Robinhood Chain</span></div>
-    <nav class="b" aria-label="Footer"><a href="docs.html">Docs</a></nav>
-    <p class="c">Nothing here is a yield figure. Figures appear when the contract is live.</p>
+    <nav class="b" aria-label="Footer"><a href="docs.html">Docs</a><a href="./#list">The list</a><a data-x href="#" rel="noopener" hidden>X</a></nav>
+    <p class="c">Nothing here is a yield figure. Fables totals are Fables' public numbers; Sink's own figures appear when the contract is live.</p>
   </div>
 </footer>
 
+<script src="js/config.js"></script>
+<script src="js/sink.js"></script>
 </body>
 </html>

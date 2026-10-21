@@ -25,8 +25,8 @@
       </a>
       <nav class="nav" aria-label="Main">
         <a href="docs.html">Docs</a>
-        
-        
+        <a href="#list">The list</a>
+        <a data-x href="#" rel="noopener" hidden>X</a>
       </nav>
     </header>
   </div>
@@ -42,13 +42,22 @@
 
 <main class="wrap">
 
-  <section class="facts" aria-label="Live facts">
-    <div><span class="label">Fables epoch</span><span class="fig" data-epoch>&mdash;</span></div>
+  <section class="facts" aria-label="Sink, now">
+    <div><span class="label">Sink epoch</span><span class="fig" data-epoch>&mdash;</span></div>
     <div><span class="label"><span class="live-dot" aria-hidden="true"></span><span data-countdown-label>Epoch closes in</span></span><span class="fig" data-countdown>&mdash;</span></div>
-    <div><span class="label">FABLES locked in Sink</span><span class="fig muted">not yet open</span></div>
-    <div><span class="label">sFABLES in circulation</span><span class="fig muted">not yet open</span></div>
-    <div><span class="label">Next vote cast</span><span class="fig">Mon 00:00 UTC</span></div>
+    <div><span class="label">Deposits</span><span class="fig muted">not yet open</span></div>
+    <div><span class="label">On the list</span><span class="fig" data-list="count">&mdash;</span></div>
+    <div><span class="label">FABLES they hold</span><span class="fig" data-list="fables">&mdash;</span></div>
   </section>
+
+  <section class="facts facts-2" aria-label="Fables, live">
+    <div><span class="label">FABLES locked in Fables</span><span class="fig" data-fact="locked">&mdash;</span><span class="sub mono" data-fact="lockedpct"></span></div>
+    <div><span class="label">Paid to voters, last 7 days</span><span class="fig" data-fact="voters7d">&mdash;</span><span class="sub mono">fees, at today's prices</span></div>
+    <div><span class="label">Swap fees, last 24 h</span><span class="fig" data-fact="fees24h">&mdash;</span><span class="sub mono">all pools, to all LPs</span></div>
+    <div><span class="label">In Fables pools</span><span class="fig" data-fact="tvl">&mdash;</span><span class="sub mono"><span data-fact="pools">&mdash;</span> pools</span></div>
+    <div><span class="label">Gauges with incentives</span><span class="fig" data-fact="gauges">&mdash;</span><span class="sub mono">this epoch</span></div>
+  </section>
+  <p class="label" style="padding:12px 0 0" data-fact="at">Fables data loads from fables.fi. Dashes mean it has not answered.</p>
 
   <section class="split">
     <div class="grid">
@@ -68,7 +77,29 @@
 
   <section class="split">
     <div class="grid">
-      <div class="head"><span class="label">02</span><h2 class="h2">What the block earns</h2></div>
+      <div class="head"><span class="label">02</span><h2 class="h2">Lock it yourself, or lock it here</h2></div>
+      <div class="body">
+        <p>A veFABLES lock pays the same whether you hold it or Sink does. What changes is the work, the exit, and the weight behind the vote.</p>
+        <div class="scroll-x" style="margin-top:24px">
+          <table class="t">
+            <thead><tr><th></th><th>Your own lock</th><th>Through Sink</th></tr></thead>
+            <tbody>
+              <tr><td class="k">The vote</td><td>You, every Tuesday, or the week's income is forfeit</td><td>Cast once a week for the whole block</td></tr>
+              <tr><td class="k">Claiming</td><td>Each pool you voted, each token it paid, every week</td><td>Claimed once and sent to you</td></tr>
+              <tr><td class="k">The exit</td><td>None for two years</td><td>Sell sFABLES, any day</td></tr>
+              <tr><td class="k">Your weight</td><td>Your lock alone</td><td>Part of one block teams negotiate with</td></tr>
+              <tr><td class="k">The rebase</td><td>Yours, if you voted and claimed it</td><td>Paid to the lock, claimed for you; handling published before open</td></tr>
+              <tr><td class="k">The cost</td><td>Gas and Tuesdays</td><td>A fixed published cut to vlSINK</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="grid">
+      <div class="head"><span class="label">03</span><h2 class="h2">What the block earns</h2></div>
       <div class="body">
         <p>Sink votes the whole pool as one block every week. On the pools it votes, Fables pays it the following. The income comes back to sFABLES holders, net of a fixed published cut to vlSINK lockers, every week, in the tokens it was earned in.</p>
         <dl class="ledger">
@@ -79,13 +110,18 @@
           <div><dt>Cut to vlSINK</dt><dd>Fixed, published before deposits open</dd></div>
           <div><dt>Paid</dt><dd>Weekly, in the tokens earned</dd></div>
         </dl>
+        <p style="margin-top:32px">Where Fables paid its voters over the last seven days, by pool. Live from fables.fi.</p>
+        <table class="t" style="margin-top:16px">
+          <thead><tr><th>Pool</th><th class="num">Paid to voters, 7 d</th></tr></thead>
+          <tbody data-pools><tr><td class="empty" colspan="2">waiting for fables.fi</td></tr></tbody>
+        </table>
       </div>
     </div>
   </section>
 
   <section class="split">
     <div class="grid">
-      <div class="head"><span class="label">03</span><h2 class="h2">Who steers it</h2></div>
+      <div class="head"><span class="label">04</span><h2 class="h2">Who steers it</h2></div>
       <div class="body">
         <p>vlSINK. Lock SINK for a fixed term and it votes once per epoch on where the block goes, and takes the platform cut. Liquid SINK earns nothing. Weight nobody directs follows the house allocation. The team holds a voting key that submits the tally and nothing else.</p>
         <dl class="ledger">
@@ -102,7 +138,7 @@
 
   <section class="split">
     <div class="grid">
-      <div class="head" style="grid-column: 1 / -1; margin-bottom: 40px"><span class="label">04</span><h2 class="h2">The week</h2></div>
+      <div class="head" style="grid-column: 1 / -1; margin-bottom: 40px"><span class="label">05</span><h2 class="h2">The week</h2></div>
     </div>
     <div class="week">
       <div><span class="day">Tue</span><span class="what">Fables epoch opens</span></div>
@@ -116,7 +152,7 @@
 
   <section class="split">
     <div class="grid">
-      <div class="head"><span class="label">05</span><h2 class="h2">If you are claiming points</h2></div>
+      <div class="head"><span class="label">06</span><h2 class="h2">If you are claiming points</h2></div>
       <div class="body">
         <p>Fables pays the points allocation in three ways. Only one of them pays it in full.</p>
         <div class="scroll-x" style="margin-top:24px">
@@ -130,21 +166,47 @@
           </table>
         </div>
         <p style="margin-top:24px"><strong style="font-weight:600">Claim auto-max. Hold the NFT. Deposit when Sink opens.</strong></p>
-        <p class="mono muted" style="font-size:15px" data-choice>choice locks Monday 19 Oct 02:00 UTC</p>
+        <p class="mono muted" style="font-size:15px" data-claim>claim window open until 20 Nov, deposits open inside it</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="split" id="list">
+    <div class="grid">
+      <div class="head"><span class="label">07</span><h2 class="h2">One message when deposits open</h2></div>
+      <div class="body">
+        <p>Leave an X handle, a wallet, or an email. You get one message when the contract is live and deposits are open, and nothing else, ever. If you say how many FABLES you hold or will claim, it is added to the total above and never shown on its own.</p>
+        <form class="join" data-join autocomplete="off" style="margin-top:24px">
+          <label><span class="label">X handle, wallet, or email</span><input name="contact" type="text" inputmode="text" spellcheck="false" placeholder="@name, 0x…, or you@…" required></label>
+          <label><span class="label">FABLES you hold or will claim, optional</span><input name="fables" type="text" inputmode="numeric" placeholder="e.g. 250000"></label>
+          <button class="btn btn-primary" type="submit">Put me on the list</button>
+          <p class="note" data-join-msg>The list is a Cloudflare KV store. It is not shared, and it is not a token allocation.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="grid">
+      <div class="head"><span class="label">08</span><h2 class="h2">Who</h2></div>
+      <div class="body">
+        <p>Sink is built by people who hold FABLES themselves. Fables is the venue; Sink is not Fables and does not speak for it.</p>
+        <dl class="ledger" data-people></dl>
       </div>
     </div>
   </section>
 
   <section class="split" style="border-bottom:none">
     <div class="grid">
-      <div class="head" style="grid-column: 1 / -1; margin-bottom: 32px"><span class="label">06</span><h2 class="h2">Questions</h2></div>
+      <div class="head" style="grid-column: 1 / -1; margin-bottom: 32px"><span class="label">09</span><h2 class="h2">Questions</h2></div>
     </div>
     <div class="faq">
       <div class="grid"><h3 class="h3">Can I get my FABLES back?</h3><p>No. The exit is selling sFABLES. The lock has no switch to turn auto-max off.</p></div>
       <div class="grid"><h3 class="h3">What keeps sFABLES near one FABLES?</h3><p>A pool Sink seeds and defends, SINK paid directly to the LPs of that pool, and the treasury buying under par out of its cut.</p></div>
-      <div class="grid"><h3 class="h3">Is Sink live?</h3><p>Not yet. The contract is in review. Deposits open inside the claim window, 20 Oct to 20 Nov.</p></div>
+      <div class="grid"><h3 class="h3">Is Sink live?</h3><p>Not yet. The contracts are in build and review. Their addresses and the review report go on the Docs page the day they are published; until then nothing here takes a deposit. Deposits open inside the claim window, 20 Oct to 20 Nov.</p></div>
       <div class="grid"><h3 class="h3">Does holding sFABLES give me a vote?</h3><p>No. sFABLES earns; vlSINK votes.</p></div>
       <div class="grid"><h3 class="h3">Can I deposit a six-month lock?</h3><p>Yes. It is extended to auto-max on deposit and arrives with the 80% it claimed.</p></div>
+      <div class="grid"><h3 class="h3">I run a pool on Fables. How do I get the block?</h3><p>Post incentives on your gauge, and keep real staked liquidity in it. The house allocation ranks pools by fees plus incentives per vote, so both move the block toward you. The Docs page has the detail for teams.</p></div>
     </div>
   </section>
 
@@ -153,11 +215,12 @@
 <footer class="wrap foot">
   <div class="grid">
     <div class="a"><img class="word" src="logo/wordmark-ink.svg" alt="sink"><span class="muted" style="font-size:15px">Robinhood Chain</span></div>
-    <nav class="b" aria-label="Footer"><a href="docs.html">Docs</a></nav>
-    <p class="c">Nothing here is a yield figure. Figures appear when the contract is live.</p>
+    <nav class="b" aria-label="Footer"><a href="docs.html">Docs</a><a href="#list">The list</a><a data-x href="#" rel="noopener" hidden>X</a></nav>
+    <p class="c">Nothing here is a yield figure. Fables totals are Fables' public numbers; Sink's own figures appear when the contract is live.</p>
   </div>
 </footer>
 
-<script src="js/countdown.js"></script>
+<script src="js/config.js"></script>
+<script src="js/sink.js"></script>
 </body>
 </html>
