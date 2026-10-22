@@ -86,6 +86,32 @@ const POOL_NAMES = {
 };
 
 const HANDLE = /^@?[A-Za-z0-9_]{1,15}$/;
+
+// The pipeline as of 22 Oct 2026: 25 line items from the private pipeline sheet, anonymised. Only the aggregate
+// (count and FABLES) is ever served; ids map to sheet rows in the sheet itself, never here. Written to KV once,
+// the first time the Worker runs against an empty namespace. Edit the sheet, not this list, after launch.
+const SEED = [
+  ['seed-01', 1592], ['seed-02', 16160], ['seed-03', 8392], ['seed-04', 2163], ['seed-05', 1621],
+  ['seed-06', 851], ['seed-07', 26], ['seed-08', 437], ['seed-09', 3047],
+  ['seed-10', 176000], ['seed-11', 1512046], ['seed-12', 93933], ['seed-13', 430184], ['seed-14', 515911],
+  ['seed-15', 1359200], ['seed-16', 753452], ['seed-17', 700000], ['seed-18', 2500], ['seed-19', 6538],
+  ['seed-20', 0], ['seed-21', 0], ['seed-22', 0], ['seed-23', 0], ['seed-24', 0], ['seed-25', 0],
+];
+
+async function ensureSeeded(env) {
+  if (await env.SINK.get('__seeded')) return;
+  let count = 0, fables = 0;
+  const ts = '2026-10-22T00:00:00.000Z';
+  for (const [id, f] of SEED) {
+    count += 1; fables += f;
+    await env.SINK.put('c:' + id, JSON.stringify({ kind: 'seed', fables: f, ts, ip: '', pos: count }));
+  }
+  const t = await env.SINK.get('__totals', 'json');
+  const base = t || { count: 0, fables: 0 };
+  await env.SINK.put('__totals', JSON.stringify({ count: base.count + count, fables: base.fables + fables }));
+  await env.SINK.put('__seeded', ts);
+}
+
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function cors(req) {
@@ -179,6 +205,7 @@ export default {
     const url = new URL(req.url);
     const path = url.pathname.replace(/\/+$/, '') || '/';
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors(req) });
+    await ensureSeeded(env);
 
     if (path === '/facts' && req.method === 'GET') {
       const cached = await env.SINK.get('__facts', 'json');
