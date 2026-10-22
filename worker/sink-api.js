@@ -14,6 +14,7 @@
 const ORIGINS = ['https://sink.fi', 'https://www.sink.fi', 'https://ushouldcashout.github.io'];
 const FABLES = 'https://www.fables.fi';
 const RPC = 'https://rpc.mainnet.chain.robinhood.com';
+const BLOCKSCOUT = 'https://robinhoodchain.blockscout.com';
 const FABLES_TOKEN = '0xb63d07cef74be747231d601bb2faa6b252c68106';
 const VE_ESCROW = '0xc1d5aDc963a57d24ADaf63aaE1bFbeCaB95f6EDD';
 const FACTS_TTL = 600; // seconds
@@ -146,10 +147,12 @@ async function totals(env) {
 
 // ---------- facts ----------
 async function rpcCall(to, data) {
+  try {
   const r = await fetch(RPC, { method: 'POST', headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'eth_call', params: [{ to, data }, 'latest'] }) });
   const j = await r.json();
   return j.result && j.result !== '0x' ? Number(BigInt(j.result)) : null;
+  } catch (e) { return null; }
 }
 const getJson = async (u) => { const r = await fetch(u, { headers: { accept: 'application/json', 'user-agent': 'sink.fi facts' } }); if (!r.ok) throw new Error(u + ' ' + r.status); return r.json(); };
 
@@ -183,14 +186,23 @@ async function computeFacts() {
         .sort((a, b) => b.usd - a.usd).slice(0, 5);
     } catch (e) { out.errors.push('voterfees: ' + e.message); }
   } catch (e) { out.errors.push('poolstats: ' + e.message); }
-  // 3. FABLES locked in the escrow, and total supply
+  // 3. FABLES locked in the escrow, and total supply. The public RPC refuses Workers' egress, so read the
+  //    explorer's indexed balances instead and fall back to the RPC only if that fails.
   try {
-    const locked = await rpcCall(FABLES_TOKEN, '0x70a08231' + VE_ESCROW.slice(2).toLowerCase().padStart(64, '0'));
-    const supply = await rpcCall(FABLES_TOKEN, '0x18160ddd');
+    let locked = null, supply = null;
+    try {
+      const tok = await getJson(BLOCKSCOUT + '/api/v2/tokens/' + FABLES_TOKEN);
+      if (tok && tok.total_supply) supply = Number(BigInt(tok.total_supply));
+      const bal = await getJson(BLOCKSCOUT + '/api/v2/addresses/' + VE_ESCROW + '/tokens?type=ERC-20');
+      const row = ((bal && bal.items) || []).find(i => i.token && i.token.address && i.token.address.toLowerCase() === FABLES_TOKEN);
+      if (row && row.value) locked = Number(BigInt(row.value));
+    } catch (e) { out.errors.push('blockscout: ' + e.message); }
+    if (locked == null) locked = await rpcCall(FABLES_TOKEN, '0x70a08231' + VE_ESCROW.slice(2).toLowerCase().padStart(64, '0'));
+    if (supply == null) supply = await rpcCall(FABLES_TOKEN, '0x18160ddd');
     if (locked != null) out.fablesLocked = locked / 1e18;
     if (supply != null) out.fablesSupply = supply / 1e18;
     if (locked != null && supply) out.lockedPct = locked / supply;
-  } catch (e) { out.errors.push('rpc: ' + e.message); }
+  } catch (e) { out.errors.push('locked: ' + e.message); }
   // 4. gauges with incentives posted this epoch
   try {
     const inc = await getJson(FABLES + '/api/indexer?op=incentives&epoch=' + out.epoch + '&off=0');
