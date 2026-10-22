@@ -52,12 +52,37 @@
   }
 
   /* ---------- live Fables facts ---------- */
+  // The chain's public RPC answers browsers but not Cloudflare Workers, so the one number the
+  // Worker cannot fetch (FABLES held by the voting escrow, and total supply) is read here instead.
+  var RPC = "https://rpc.mainnet.chain.robinhood.com";
+  var FABLES_TOKEN = "0xb63d07cef74be747231d601bb2faa6b252c68106";
+  var VE_ESCROW = "c1d5adc963a57d24adaf63aae1bfbecab95f6edd";
+  function ethCall(to, data) {
+    return fetch(RPC, { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to, data: data }, "latest"] }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { return j.result && j.result !== "0x" ? Number(BigInt(j.result)) / 1e18 : null; });
+  }
+  function lockedFromChain() {
+    if (typeof BigInt === "undefined") return;
+    Promise.all([
+      ethCall(FABLES_TOKEN, "0x70a08231" + VE_ESCROW.padStart(64, "0")),
+      ethCall(FABLES_TOKEN, "0x18160ddd")
+    ]).then(function (r) {
+      var locked = r[0], supply = r[1];
+      if (locked == null) return;
+      set("[data-fact=locked]", big(locked));
+      set("[data-fact=lockedpct]", supply ? pct(locked / supply) + " of supply" : "");
+    }).catch(function () { /* dashes stay */ });
+  }
   function facts() {
     if (!C.API || !document.querySelector("[data-fact]")) return;
     fetch(C.API + "/facts").then(function (r) { return r.json(); }).then(function (f) {
       if (!f || f.error) return;
-      set("[data-fact=locked]", big(f.fablesLocked));
-      set("[data-fact=lockedpct]", f.lockedPct != null ? pct(f.lockedPct) + " of supply" : "");
+      if (f.fablesLocked != null) {
+        set("[data-fact=locked]", big(f.fablesLocked));
+        set("[data-fact=lockedpct]", f.lockedPct != null ? pct(f.lockedPct) + " of supply" : "");
+      } else { lockedFromChain(); }
       set("[data-fact=voters7d]", usd(f.voterFees7dUsd));
       set("[data-fact=fees24h]", usd(f.fees24hUsd));
       set("[data-fact=tvl]", usd(f.tvlUsd));
