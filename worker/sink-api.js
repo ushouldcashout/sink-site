@@ -107,10 +107,8 @@ async function ensureSeeded(env) {
     count += 1; fables += f;
     await env.SINK.put('c:' + id, JSON.stringify({ kind: 'seed', fables: f, ts, ip: '', pos: count }));
   }
-  const t = await env.SINK.get('__totals', 'json');
-  const base = t || { count: 0, fables: 0 };
-  await env.SINK.put('__totals', JSON.stringify({ count: base.count + count, fables: base.fables + fables }));
   await env.SINK.put('__seeded', ts);
+  await recount(env);
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -140,9 +138,25 @@ function normalise(raw) {
   return null;
 }
 
-async function totals(env) {
+// Totals are recomputed from the entries themselves (a counter in KV loses updates when joins land
+// within the same second of each other) and cached for TOTALS_TTL seconds. Writes force a recount.
+const TOTALS_TTL = 60;
+async function recount(env) {
+  let cursor, count = 0, fables = 0;
+  do {
+    const l = await env.SINK.list({ prefix: 'c:', cursor, limit: 1000 });
+    for (const k of l.keys) { const v = await env.SINK.get(k.name, 'json'); if (v) { count += 1; fables += Number(v.fables) || 0; } }
+    cursor = l.list_complete ? null : l.cursor;
+  } while (cursor);
+  const t = { count, fables, at: Date.now() };
+  await env.SINK.put('__totals', JSON.stringify(t));
+  return t;
+}
+async function totals(env, force) {
   const t = await env.SINK.get('__totals', 'json');
-  return t || { count: 0, fables: 0 };
+  if (!force && t && t.at && Date.now() - t.at < TOTALS_TTL * 1000) return { count: t.count, fables: t.fables };
+  const r = await recount(env);
+  return { count: r.count, fables: r.fables };
 }
 
 // ---------- facts ----------
@@ -233,6 +247,10 @@ export default {
     }
 
     if (path === '/count' && req.method === 'GET') return json(req, await totals(env));
+    if (path === '/admin' && req.method === 'POST') {
+      if (!env.EXPORT_KEY || url.searchParams.get('key') !== env.EXPORT_KEY) return json(req, { error: 'nope' }, 403);
+      return json(req, await totals(env, true));
+    }
 
     if (path === '/export' && req.method === 'GET') {
       if (!env.EXPORT_KEY || url.searchParams.get('key') !== env.EXPORT_KEY) return json(req, { error: 'nope' }, 403);
@@ -250,7 +268,7 @@ export default {
       const n = normalise(url.searchParams.get('contact'));
       if (!n) return json(req, { error: 'invalid contact' }, 400);
       const key = 'c:' + n.value; const had = await env.SINK.get(key, 'json');
-      if (had) { await env.SINK.delete(key); const t = await totals(env); t.count = Math.max(0, t.count - 1); t.fables = Math.max(0, t.fables - (had.fables || 0)); await env.SINK.put('__totals', JSON.stringify(t)); }
+      if (had) { await env.SINK.delete(key); await recount(env); }
       return json(req, { ok: true, removed: !!had });
     }
 
@@ -269,11 +287,11 @@ export default {
       const ipCount = parseInt((await env.SINK.get(ipKey)) || '0', 10);
       if (ipCount >= 10) return json(req, { error: 'too many from this network' }, 429);
       const t = await totals(env);
-      t.count += 1; t.fables += fables;
-      await env.SINK.put(key, JSON.stringify({ kind: n.kind, fables, ts: new Date().toISOString(), ip: ipHash, pos: t.count }));
-      await env.SINK.put('__totals', JSON.stringify(t));
+      const pos = t.count + 1;
+      await env.SINK.put(key, JSON.stringify({ kind: n.kind, fables, ts: new Date().toISOString(), ip: ipHash, pos }));
       await env.SINK.put(ipKey, String(ipCount + 1), { expirationTtl: 172800 });
-      return json(req, { ok: true, position: t.count });
+      ctx.waitUntil(recount(env));
+      return json(req, { ok: true, position: pos });
     }
 
     return json(req, { error: 'not found' }, 404);
