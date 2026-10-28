@@ -57,7 +57,7 @@
       <section id="fables">
         <span class="label">01</span>
         <h2 class="h2">Fables mechanics</h2>
-        <p>Fables is the ve(3,3) DEX on Robinhood Chain, built on Uniswap v4. Its token is FABLES. Lock FABLES for two years at auto-max and the lock votes every week on which pools receive emissions.</p>
+        <p>Fables is the ve(3,3) DEX on Robinhood Chain, built on Uniswap v4. Its token is FABLES. Lock FABLES for two years at auto-max and the lock votes on which pools receive emissions. A vote is standing: it carries into every following week until the owner changes it, and changing it more than once in a week is penalised. A pool's weekly emissions are capped at 5x its previous week's staked-liquidity fees plus the voter incentives posted for it (the multiple is reviewed monthly by Fables).</p>
         <p>A voting lock receives, on the pools it votes:</p>
         <dl class="ledger" style="margin-bottom:24px">
           <div><dt>Swap fees, staked liquidity</dt><dd class="mono">100%</dd></div>
@@ -147,7 +147,7 @@
       <section id="week">
         <span class="label">04</span>
         <h2 class="h2">The week</h2>
-        <p>Fables' epoch runs Tuesday to Tuesday. Sink's week is built around it.</p>
+        <p>Fables' epoch runs Tuesday to Tuesday. A Fables vote carries forward on its own; Sink re-votes the block once a week so it follows the fees and incentives rather than last month's pools. Sink's week is built around that.</p>
         <dl class="ledger">
           <div><dt>Tuesday</dt><dd>Fables epoch opens</dd></div>
           <div><dt>Tuesday to Sunday</dt><dd>vlSINK holders vote</dd></div>
